@@ -54,13 +54,13 @@ Using advanced SQL techniques — including **CTEs, Window Functions, Subqueries
 
 ---
 
-# 🎯 Objective 1: Understanding the Menu Structure
+## 🎯 Objective 1: Understanding the Menu Structure
 
 Before analyzing customer behavior, it’s important to understand the pricing architecture and composition of the menu itself.
 
 ---
 
-## 🔎 Explore Menu Structure
+### 🔎 Explore Menu Structure
 
 We first inspect the table to understand available columns and data types.
 
@@ -70,7 +70,7 @@ SELECT * FROM menu_items;
 
 ---
 
-## 📌 How Many Items Are on the Menu?
+### 📌 How Many Items Are on the Menu?
 
 Understanding menu size helps contextualize demand concentration and pricing spread.
 
@@ -81,7 +81,7 @@ FROM menu_items;
 
 ---
 
-## 💰 What Are the Least & Most Expensive Items?
+### 💰 What Are the Least & Most Expensive Items?
 
 Pricing extremes reveal premium positioning and potential margin drivers.  
 Using `DENSE_RANK()` ensures ties are handled fairly.
@@ -103,7 +103,7 @@ WHERE expensive_rank = 1 OR cheapest_rank = 1;
 
 ---
 
-## 🍝 Italian Cuisine Pricing Analysis
+### 🍝 Italian Cuisine Pricing Analysis
 
 Italian cuisine often carries strong demand in international restaurants.  
 We evaluate its price range and positioning within the menu.
@@ -120,7 +120,7 @@ WHERE category = 'Italian';
 
 ---
 
-## 📊 Category Distribution & Pricing Strategy
+### 📊 Category Distribution & Pricing Strategy
 
 This helps determine whether certain cuisines are positioned as premium, mid-tier, or budget offerings.
 
@@ -136,13 +136,13 @@ ORDER BY avg_dish_price DESC;
 
 ---
 
-# 🎯 Objective 2: Understanding Order Patterns
+## 🎯 Objective 2: Understanding Order Patterns
 
 After understanding pricing structure, we analyze transaction behavior and operational volume.
 
 ---
 
-## 📅 What Is the Date Range?
+### 📅 What Is the Date Range?
 
 This validates time coverage and ensures no data gaps.
 
@@ -155,7 +155,7 @@ FROM order_details;
 
 ---
 
-## 📦 How Many Orders & Items Were Sold?
+### 📦 How Many Orders & Items Were Sold?
 
 This measures operational scale and throughput.
 
@@ -168,7 +168,7 @@ FROM order_details;
 
 ---
 
-## 🏆 Which Orders Had the Most Items?
+### 🏆 Which Orders Had the Most Items?
 
 Large item counts may indicate catering, group dining, or high-value customers.
 
@@ -183,7 +183,7 @@ ORDER BY num_items DESC;
 
 ---
 
-## 📈 How Many Orders Had More Than 12 Items?
+### 📈 How Many Orders Had More Than 12 Items?
 
 Quantifying bulk orders helps assess catering potential.
 
@@ -199,13 +199,13 @@ FROM (
 
 ---
 
-# 🎯 Objective 3: Customer Behavior & Revenue Analysis
+## 🎯 Objective 3: Customer Behavior & Revenue Analysis
 
 This is where pricing and order behavior intersect to generate business insight.
 
 ---
 
-## 🔗 Combine Menu & Order Data
+### 🔗 Combine Menu & Order Data
 
 To connect revenue with item-level behavior:
 
@@ -216,14 +216,13 @@ SELECT
     m.item_name,
     m.category,
     m.price
-FROM order_details o
-JOIN menu_items m
-    ON o.item_id = m.menu_item_id;
+FROM order_details o LEFT JOIN menu_items m
+     ON o.item_id = m.menu_item_id;
 ```
 
 ---
 
-## 📊 Most & Least Ordered Items (Volume + Revenue)
+### 📊 Most & Least Ordered Items (Volume + Revenue)
 
 Volume alone doesn’t tell the full story — revenue contribution is equally important.
 
@@ -233,9 +232,8 @@ SELECT
     m.category,
     COUNT(*) AS times_ordered,
     SUM(m.price) AS total_revenue
-FROM order_details o
-JOIN menu_items m
-    ON o.item_id = m.menu_item_id
+FROM order_details o LEFT JOIN menu_items m
+     ON o.item_id = m.menu_item_id
 GROUP BY m.item_name, m.category
 ORDER BY times_ordered DESC;
 ```
@@ -247,7 +245,7 @@ This reveals:
 
 ---
 
-## 💵 Top 5 Highest-Spending Orders
+### 💵 Top 5 Highest-Spending Orders
 
 Identifying top spenders helps understand revenue concentration and customer value.
 
@@ -255,9 +253,8 @@ Identifying top spenders helps understand revenue concentration and customer val
 SELECT 
     o.order_id,
     SUM(m.price) AS total_spend
-FROM order_details o
-JOIN menu_items m
-    ON o.item_id = m.menu_item_id
+FROM order_details o LEFT JOIN menu_items m
+     ON o.item_id = m.menu_item_id
 GROUP BY o.order_id
 ORDER BY total_spend DESC
 LIMIT 5;
@@ -265,7 +262,7 @@ LIMIT 5;
 
 ---
 
-## 🥇 Inspect the Highest Spend Order
+### 🥇 Inspect the Highest Spend Order
 
 To understand purchasing composition and bundle patterns:
 
@@ -274,9 +271,8 @@ WITH highest_order AS (
     SELECT 
         o.order_id,
         SUM(m.price) AS total_spend
-    FROM order_details o
-    JOIN menu_items m
-        ON o.item_id = m.menu_item_id
+    FROM order_details o LEFT JOIN menu_items m
+         ON o.item_id = m.menu_item_id
     GROUP BY o.order_id
     ORDER BY total_spend DESC
     LIMIT 1
@@ -287,9 +283,8 @@ SELECT
     m.item_name,
     m.category,
     m.price
-FROM order_details o
-JOIN menu_items m
-    ON o.item_id = m.menu_item_id
+FROM order_details o LEFT JOIN menu_items m
+     ON o.item_id = m.menu_item_id
 WHERE o.order_id = (SELECT order_id FROM highest_order);
 ```
 
@@ -306,16 +301,15 @@ FROM (
     SELECT 
         o.order_id,
         SUM(m.price) AS order_total
-    FROM order_details o
-    JOIN menu_items m
-        ON o.item_id = m.menu_item_id
+    FROM order_details o LEFT JOIN menu_items m
+         ON o.item_id = m.menu_item_id
     GROUP BY o.order_id
 ) AS order_totals;
 ```
 
 ---
 
-# 📋 Analytical Bias Audit
+## 📋 Analytical Bias Audit
 
 | Stage | Risk | Mitigation |
 |-------|------|------------|
@@ -325,15 +319,15 @@ FROM (
 
 ---
 
-# 💡 Strategic Recommendations
+## 💡 Strategic Recommendations
 
-## 1️⃣ Premium Bundle Strategy for High-Revenue Categories
+### 1️⃣ Premium Bundle Strategy for High-Revenue Categories
 Italian cuisine shows strong pricing leverage and revenue potential.  
 Introduce curated premium bundles (e.g., “Italian Dinner Experience”) that package appetizers, mains, and desserts to increase Average Order Value (AOV).
 
 ---
 
-## 2️⃣ Menu Engineering Optimization
+### 2️⃣ Menu Engineering Optimization
 Segment items into:
 - High Volume / High Revenue (Stars)
 - High Volume / Low Revenue (Traffic Drivers)
@@ -347,7 +341,7 @@ Use this framework to:
 
 ---
 
-## 3️⃣ Corporate & Group Targeting Strategy
+### 3️⃣ Corporate & Group Targeting Strategy
 Orders with more than 12 items indicate group purchasing behavior.  
 Develop:
 - Corporate lunch packages  
@@ -358,7 +352,7 @@ This captures predictable bulk revenue streams.
 
 ---
 
-## 4️⃣ Revenue Concentration Monitoring
+### 4️⃣ Revenue Concentration Monitoring
 If a small percentage of orders contributes disproportionately to revenue, consider:
 - Loyalty programs for high spenders  
 - Personalized offers  
@@ -366,7 +360,7 @@ If a small percentage of orders contributes disproportionately to revenue, consi
 
 ---
 
-# 📈 Skills Demonstrated
+## 📈 Skills Demonstrated
 
 - Advanced SQL (CTEs, Window Functions, Subqueries)
 - Revenue Analysis & KPI Computation
@@ -378,7 +372,7 @@ If a small percentage of orders contributes disproportionately to revenue, consi
 
 ---
 
-# 📚 Credits
+## 📚 Credits
 
 The dataset and initial project inspiration were adapted from guided SQL case studies provided by **Maven Analytics**.
 
@@ -388,7 +382,7 @@ This implementation, analysis approach, business framing, and strategic recommen
 
 ---
 
-# 👩‍💻 Author
+## 👩‍💻 Author
 
 **Ayushi Gajendra**  
 SQL • Data Analytics • Business Intelligence  
