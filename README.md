@@ -371,6 +371,16 @@ If a small percentage of orders contributes disproportionately to revenue, consi
 
 ---
 
+# 📚 Credits
+
+The dataset and initial project inspiration were adapted from guided SQL case studies provided by **Maven Analytics**.
+
+This implementation, analysis approach, business framing, and strategic recommendations were independently developed and expanded upon as part of my SQL portfolio work.
+
+🔗 https://mavenanalytics.io/
+
+---
+
 # 👩‍💻 Author
 
 **Ayushi Gajendra**  
