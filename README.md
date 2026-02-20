@@ -1,6 +1,13 @@
 # 🍽️ Restaurant Order Analysis: Culinary Data Science  
 
-**An End-to-End SQL Project Exploring Customer Behavior and Menu Profitability**
+### An End-to-End SQL Project Exploring Customer Behavior and Menu Profitability
+
+![SQL](https://img.shields.io/badge/Language-SQL-blue)
+![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql&logoColor=white)
+![Data Analytics](https://img.shields.io/badge/Field-Data%20Analytics-brightgreen)
+![Business Intelligence](https://img.shields.io/badge/Focus-Business%20Intelligence-yellow)
+![Revenue Optimization](https://img.shields.io/badge/Objective-Revenue%20Optimization-red)
+
 
 ---
 
