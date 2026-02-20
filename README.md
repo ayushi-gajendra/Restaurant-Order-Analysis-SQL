@@ -13,7 +13,7 @@
 
 ## 📌 Project Overview
 
-The **Taste of the World Cafe** introduced a new international menu at the beginning of the year.  
+The "**Taste of the World Cafe**" introduced a new international menu at the beginning of the year.  
 Management wants to understand how customers are responding to the updated offerings and which menu items are driving profitability.
 
 This project analyzes **12,266 transactional records** from Q1 (January–March 2023) to answer critical business questions:
